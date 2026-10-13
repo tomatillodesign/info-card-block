@@ -4,7 +4,7 @@ Plugin Name: Tomatillo Design ~ Custom Info Card
 Description: Create custom blocks and run all of your code here. Requires Advanced Custom Fields PRO.
 Author: Chris Liu-Beers, Tomatillo Design
 Author URI: http://www.tomatillodesign.com
-Version: 2.4.1
+Version: 2.4.2
 License: GPL v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 */
@@ -24,6 +24,23 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 add_action( 'init', 'clb_custom_acf_blocks_register_acf_blocks_d3fdcc70' );
 function clb_custom_acf_blocks_register_acf_blocks_d3fdcc70() {
     register_block_type( plugin_dir_path( __FILE__ ) . 'blocks/clb-custom-info-card' );
+}
+
+
+// Editor only: stop link clicks in an ACF block preview from navigating the editor canvas.
+// enqueue_block_assets is the hook that reaches the iframed canvas; is_admin() keeps it off the front end.
+add_action( 'enqueue_block_assets', 'clb_custom_acf_blocks_editor_no_navigate_d3fdcc70' );
+function clb_custom_acf_blocks_editor_no_navigate_d3fdcc70() {
+    if ( ! is_admin() ) {
+        return;
+    }
+    wp_enqueue_script(
+        'clb-custom-info-card-editor-no-navigate',
+        plugin_dir_url( __FILE__ ) . 'assets/editor-no-navigate.js',
+        array(),
+        '2.4.2',
+        true
+    );
 }
 
 
